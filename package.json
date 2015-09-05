@@ -1,0 +1,30 @@
+{
+  "name": "enb-favicons",
+  "version": "0.1.0",
+  "description": "enb favicons tech",
+  "keywords": [
+    "bem",
+    "enb",
+    "favicons"
+  ],
+  "homepage": "https://github.com/teryaew/enb-favicons",
+  "bugs": {
+    "url": "https://github.com/teryaew/enb-favicons/issues"
+  },
+  "license": "MIT",
+  "author": "Mitya Teryaew <mitya.teryaew@gmail.com>",
+  "main": "techs/enb-favicons.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/teryaew/enb-favicons.git"
+  },
+  "peerDependencies": {
+    "enb": ">=0.16.0 <1.0.0"
+  },
+  "dependencies": {
+    "favicons": "^3.1.3",
+    "html2bemjson": "^1.9.0",
+    "lodash": "^3.10.1",
+    "vow": "^0.4.10"
+  }
+}
