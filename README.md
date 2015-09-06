@@ -21,7 +21,7 @@ Options are the same as in `favicons` package, except `target` (for enb tech pro
 
 ```javascript
 config.node('src/blocks/common.blocks/favicons', function(nodeConfig) {
-    nodeConfig.addTech(require('enb/techs/enb-favicons'), {
+    nodeConfig.addTech(require('enb-favicons/techs/enb-favicons'), {
         files : {
             src : 'public/favicons/src/favicon.png',
             dest : 'public/favicons/dest/',
