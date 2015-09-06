@@ -37,6 +37,7 @@
 var defaults = require('lodash.defaults');
 var favicons = require('favicons');
 var html2bemjson = require('html2bemjson');
+var repeat = require('lodash.repeat');
 var vow = require('vow');
 
 module.exports = require('enb/lib/build-flow').create()
@@ -84,7 +85,6 @@ module.exports = require('enb/lib/build-flow').create()
             target : null
         });
 
-
         if (options.files.html) {
             favicons(options, function (error, metadata) {
                 if (error) {
@@ -102,13 +102,20 @@ module.exports = require('enb/lib/build-flow').create()
 
         return def.promise();
     })
+
     .methods({
         getTpl : function(metadata) {
+            var bemjson = html2bemjson
+                            .stringify(metadata)
+                            .replace(/^\s{4}/gm, repeat(' ', 8))
+                            .replace(/]$/g, repeat(' ', 4) + ']');
+
             return [
                 'block(\'favicons\').def()(function() {',
-                'applyCtx(' + html2bemjson.stringify(metadata) + ');',
+                '    applyCtx(' + bemjson + ');',
                 '})'
             ].join('\n');
         }
     })
+
     .createTech();
