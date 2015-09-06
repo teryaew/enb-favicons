@@ -34,9 +34,9 @@
  * ```
  */
 
+var defaults = require('lodash.defaults');
 var favicons = require('favicons');
 var html2bemjson = require('html2bemjson');
-var _ = require('lodash');
 var vow = require('vow');
 
 module.exports = require('enb/lib/build-flow').create()
@@ -46,7 +46,7 @@ module.exports = require('enb/lib/build-flow').create()
     .builder(function() {
         var _this = this;
         var def = vow.defer();
-        var options = _.defaultsDeep(this._options || {}, {
+        var options = defaults(this._options || {}, {
             files : {
                 src : null,
                 dest : null,
