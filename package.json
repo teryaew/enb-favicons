@@ -26,6 +26,6 @@
     "html2bemjson": "^1.9.0",
     "lodash.defaults": "^3.1.2",
     "lodash.repeat": "^3.0.1",
-    "vow": "^0.4.10"
+    "vow": "^0.4.11"
   }
 }

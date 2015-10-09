@@ -1,8 +1,9 @@
 # enb-favicons
 
-[ENB](https://github.com/enb-make/enb) technology for favicons generation. Wrapper around [favicons](https://github.com/haydenbleasel/favicons) package.
+[ENB](https://github.com/enb-make/enb) technology for favicons generation.
+Wrapper around [favicons](https://github.com/haydenbleasel/favicons) package.
 
-## Installing
+## Installation
 
 ```
 npm install --save-dev enb-favicons
@@ -18,18 +19,27 @@ Options are the same as in `favicons` package, except `target` (for enb tech pro
 * *String* **target** — Target for technology. Required option.
 
 ## Example
+You can run it in project with YENV environment variable:
+
+```
+YENV=favicons enb make -n
+```
+
+and those lines in your `enb` config:
 
 ```javascript
-config.node('src/blocks/common.blocks/favicons', function(nodeConfig) {
-    nodeConfig.addTech(require('enb-favicons/techs/enb-favicons'), {
-        files : {
-            src : 'public/favicons/src/favicon.png',
-            dest : 'public/favicons/dest/',
-            html : 'public/favicons/dest/favicons.html',
-            iconsPath : '/favicons/dest/'
-        },
-        target : '?.bemhtml'
+if (config._env.YENV === 'favicons') {
+    config.node('src/blocks/common.blocks/favicons', function(nodeConfig) {
+        nodeConfig.addTech(require('enb-favicons/techs/enb-favicons'), {
+            files : {
+                src : 'public/favicons/src/favicon.png',
+                dest : 'public/favicons/dest/',
+                html : 'public/favicons/dest/favicons.html',
+                iconsPath : '/favicons/dest/'
+            },
+            target : '?.bemhtml'
+        });
+        nodeConfig.addTargets([ '?.bemhtml' ]);
     });
-    nodeConfig.addTargets([ '?.bemhtml' ]);
-});
+}
 ```
