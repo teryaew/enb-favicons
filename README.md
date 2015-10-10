@@ -26,7 +26,7 @@ Options are the same as in `favicons` package, except `target` (for enb tech pro
 * *String* **target** — Target for technology. Required option.
 
 ## Example
-You can run it in project with YENV environment variable:
+You can run it in project with YENV environment variable
 
 ```
 YENV=favicons enb make -n
@@ -49,8 +49,18 @@ if (config._env.YENV === 'favicons') {
                     target : '?.bemhtml'
                 }]
             );
-            nodeConfig.addTargets(['?.bemhtml']);
+            nodeConfig.addTargets([ '?.bemhtml' ]);
         });
     });
 }
+```
+
+Finally, go to your `page` template and add block in `head` field:
+```javascript
+    {
+        block : 'page',
+        head : [
+            { block : 'favicons' }
+        ]
+    }
 ```
