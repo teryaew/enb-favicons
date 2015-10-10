@@ -3,6 +3,13 @@
 [ENB](https://github.com/enb-make/enb) technology for favicons generation.
 Wrapper around [favicons](https://github.com/haydenbleasel/favicons) package.
 
+## Notes
+
+Requirements for favicons source (master) picture:
+
+1. Should be square
+2. Should be at least 57x57 (for ios), 70x70 (windows), 228x228 (coast), 300x300 (open_graph).
+
 ## Installation
 
 ```
