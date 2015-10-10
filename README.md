@@ -7,7 +7,7 @@ Wrapper around [favicons](https://github.com/haydenbleasel/favicons) package.
 
 Requirements for favicons source (master) picture:
 
-1. Should be square
+1. Should be square.
 2. Should be at least 57x57 (for ios), 70x70 (windows), 228x228 (coast), 300x300 (open_graph).
 
 ## Installation
@@ -36,17 +36,21 @@ and those lines in your `enb` config:
 
 ```javascript
 if (config._env.YENV === 'favicons') {
-    config.node('src/blocks/common.blocks/favicons', function(nodeConfig) {
-        nodeConfig.addTech(require('enb-favicons/techs/enb-favicons'), {
-            files : {
-                src : 'public/favicons/src/favicon.png',
-                dest : 'public/favicons/dest/',
-                html : 'public/favicons/dest/favicons.html',
-                iconsPath : '/favicons/dest/'
-            },
-            target : '?.bemhtml'
+    config.mode('favicons', function() {
+        config.node('src/blocks/common.blocks/favicons', function(nodeConfig) {
+            nodeConfig.addTech(
+                [require('enb-favicons/techs/enb-favicons'), {
+                    files : {
+                        src : 'public/favicons/src/favicon.png',
+                        dest : 'public/favicons/dest/',
+                        html : 'public/favicons/dest/favicons.html',
+                        iconsPath : '/favicons/dest/'
+                    },
+                    target : '?.bemhtml'
+                }]
+            );
+            nodeConfig.addTargets(['?.bemhtml']);
         });
-        nodeConfig.addTargets([ '?.bemhtml' ]);
     });
 }
 ```
