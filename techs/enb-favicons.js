@@ -15,8 +15,9 @@
 
 var defaults = require('lodash.defaults');
 var favicons = require('favicons');
-var html2bemjson = require('html2bemjson');
+var posthtml = require('posthtml');
 var repeat = require('lodash.repeat');
+var stringifyObj = require('stringify-object');
 var vow = require('vow');
 
 module.exports = require('enb/lib/build-flow').create()
@@ -84,14 +85,28 @@ module.exports = require('enb/lib/build-flow').create()
 
     .methods({
         getTpl : function(metadata) {
-            var bemjson = html2bemjson
-                            .stringify(metadata)
-                            .replace(/^\s{4}/gm, repeat(' ', 8))
-                            .replace(/]$/g, repeat(' ', 4) + ']');
+            var tree = posthtml([
+                function (tree) {
+                    var arr = [];
+
+                    tree.walk(function (node) {
+                        if (/\n/gm.test(node)) return false;
+                        arr.push(node);
+                        return node;
+                    });
+
+                    return arr;
+                }
+            ]).process(metadata, { sync : true }).tree;
+
+            var result = stringifyObj(tree)
+                        .replace(/^\t{1}/g, repeat(' ', 8))
+                        .replace(/\t/gm, repeat(' ', 4))
+                        .replace(/]$/g, repeat(' ', 4) + ']');
 
             return [
                 'block(\'favicons\').def()(function() {',
-                '    applyCtx(' + bemjson + ');',
+                '    applyCtx(' + result + ');',
                 '})'
             ].join('\n');
         }
