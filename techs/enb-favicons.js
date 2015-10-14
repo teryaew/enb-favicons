@@ -89,8 +89,7 @@ module.exports = require('enb/lib/build-flow').create()
                 function (tree) {
                     var arr = [];
 
-                    tree.walk(function (node) {
-                        if (/\n/gm.test(node)) return false;
+                    tree.match({ tag : true }, function(node) {
                         arr.push(node);
                         return node;
                     });
@@ -100,7 +99,7 @@ module.exports = require('enb/lib/build-flow').create()
             ]).process(metadata, { sync : true }).tree;
 
             var result = stringifyObj(tree)
-                        .replace(/^\t{1}/g, repeat(' ', 8))
+                        .replace(/^\t{1}/gm, repeat(' ', 8))
                         .replace(/\t/gm, repeat(' ', 4))
                         .replace(/]$/g, repeat(' ', 4) + ']');
 
