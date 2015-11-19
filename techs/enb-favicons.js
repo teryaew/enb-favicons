@@ -13,6 +13,7 @@
  *
  */
 
+var buildFlow = require('enb').buildFlow || require('enb/lib/build-flow');
 var defaults = require('lodash.defaults');
 var favicons = require('favicons');
 var posthtml = require('posthtml');
@@ -20,7 +21,7 @@ var repeat = require('lodash.repeat');
 var stringifyObj = require('stringify-object');
 var vow = require('vow');
 
-module.exports = require('enb/lib/build-flow').create()
+module.exports = buildFlow.create()
     .name('enb-favicons')
     .target('target')
 
