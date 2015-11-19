@@ -2,20 +2,17 @@
  * enb-favicons
  * ============
  *
- * **Options**
- * Options are the same as in `favicons` package, except `target` (for enb tech process).
- *
- * * *Object* **files** — Paths to files. There are required fields: `src` & `dest`.
- * * *Object* **icons** — Icon types.
- * * *Object* **settings** — Additional settings.
- * * *Object* **favicon_generation** — Complete JSON overwrite for the favicon_generation object.
- * * *String* **target** — Target for technology. Required option.
+ * Options are the same as in `favicons` package, except for:
+ * `destination` (path to destination folder);
+ * `target` (needs for enb tech process).
  *
  */
 
 var buildFlow = require('enb').buildFlow || require('enb/lib/build-flow');
 var defaults = require('lodash.defaults');
 var favicons = require('favicons');
+var fs = require('fs');
+var path = require('path');
 var posthtml = require('posthtml');
 var repeat = require('lodash.repeat');
 var stringifyObj = require('stringify-object');
@@ -28,58 +25,44 @@ module.exports = buildFlow.create()
     .builder(function() {
         var _this = this;
         var def = vow.defer();
-        var options = defaults(this._options || {}, {
-            files : {
-                src : null,
-                dest : null,
-                html : null,
-                iconsPath : null,
-                androidManifest : null,
-                browserConfig : null,
-                firefoxManifest : null,
-                yandexManifest : null
-            },
+        var source = this._options.source || null;
+        var configuration = defaults(this._options.configuration || {}, {
+            appName : null,                  // Your application's name. `string`
+            appDescription : null,           // Your application's description. `string`
+            developerName : null,            // Your (or your developer's) name. `string`
+            developerURL : null,             // Your (or your developer's) URL. `string`
+            background : '#fff',             // Background colour for flattened icons. `string`
+            path : '/',                      // Path for overriding default icons path. `string`
+            url : '/',                       // Absolute URL for OpenGraph image. `string`
+            display : 'standalone',          // Android display: "browser" or "standalone". `string`
+            orientation : 'portrait',        // Android orientation: "portrait" or "landscape". `string`
+            version : '1.0',                 // Your application's version number. `number`
+            logging : false,                 // Print logs to console? `boolean`
+            online : false,                  // Use RealFaviconGenerator to create favicons? `boolean`
             icons : {
-                android : true,
-                appleIcon : true,
-                appleStartup : true,
-                coast : true,
-                favicons : true,
-                firefox : true,
-                opengraph : true,
-                windows : true,
-                yandex : true
-            },
-            settings : {
-                appName : null,
-                appDescription : null,
-                developer : null,
-                developerURL : null,
-                version : 1.0,
-                background : null,
-                index : null,
-                url : null,
-                silhouette : false,
-                logging : true
-            },
-            favicon_generation : null,
-            target : null
+                android : true,              // Create Android homescreen icon. `boolean`
+                appleIcon : true,            // Create Apple touch icons. `boolean`
+                appleStartup : true,         // Create Apple startup images. `boolean`
+                coast : true,                // Create Opera Coast icon. `boolean`
+                favicons : true,             // Create regular favicons. `boolean`
+                firefox : true,              // Create Firefox OS icons. `boolean`
+                opengraph : true,            // Create Facebook OpenGraph. `boolean`
+                windows : true,              // Create Windows 8 tiles. `boolean`
+                yandex : true                // Create Yandex browser icon. `boolean`
+            }
         });
 
-        if (options.files.html) {
-            favicons(options, function (error, metadata) {
-                if (error) {
-                    console.error('Error: ' + error.favicon_generation_result.result.error_message);
-                    def.reject();
-                } else {
-                    def.resolve(_this.getTpl(metadata));
-                }
-            });
-        } else {
-            favicons(options, function (metadata) {
-                def.resolve(_this.getTpl(metadata));
-            });
-        }
+        favicons(source, configuration, function (error, response) {
+            if (error) {
+                console.error(error.name + '|' + error.message);
+                def.reject();
+            } else {
+                response.images.forEach(function(favicon) {
+                    fs.writeFileSync(path.join(_this._options.destination, favicon.name), favicon.contents);
+                });
+                def.resolve(_this.getTpl(response.html));
+            }
+        });
 
         return def.promise();
     })

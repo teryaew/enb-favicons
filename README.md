@@ -17,13 +17,9 @@ npm install --save-dev enb-favicons
 ```
 
 ## Options
-Options are the same as in `favicons` package, except `target` (for enb tech process).
-
-* *Object* **files** — Paths to files. There are required fields: `src` & `dest`.
-* *Object* **icons** — Icon types.
-* *Object* **settings** — Additional settings.
-* *Object* **favicon_generation** — Complete JSON overwrite for the favicon_generation object.
-* *String* **target** — Target for technology. Required option.
+Options are the same as in `favicons` package, except for:
+* `destination` (path to destination folder);
+* `target` (needs for enb tech process).
 
 ## Example
 You can run it in project with YENV environment variable
@@ -40,12 +36,12 @@ if (config._env.YENV === 'favicons') {
         config.node('src/blocks/common.blocks/favicons', function(nodeConfig) {
             nodeConfig.addTech(
                 [require('enb-favicons/techs/enb-favicons'), {
-                    files : {
-                        src : 'public/favicons/src/favicon.png',
-                        dest : 'public/favicons/dest/',
-                        html : 'public/favicons/dest/favicons.html',
-                        iconsPath : '/favicons/dest/'
+                    source : 'public/favicons/src/favicon.png',
+                    configuration : {
+                        path : 'favicons/dest',
+                        logging : true
                     },
+                    destination : 'public/favicons/dest/',
                     target : '?.bemhtml'
                 }]
             );
